@@ -45,6 +45,59 @@ about transcripts, not pixels.
 
 ## Kit check (see full output below)
 
+## Bundle attempt (this session) — NOT WRITABLE FROM HERE, parent must re-run
+- My session found by bundle: sessions/muse-app/355975ea-6fd5-4601-aa53-4af50be90787.jsonl,
+  created 2026-11-21T05:40:41Z (in-window), 35 turns / 119 lines at last scan.
+- Parent session b85a997a auto-carried as evidence, cut to 6 turns / 32 lines
+  (records before this repo was first named left out). Its first record is
+  05:35:42Z (pre-opening) — whether the CUT portion is clean is for
+  `check --transcripts` to decide; bundle warns it "cannot be entered as it is".
+- BLOCKER 1 (parent chain): prompt is handed-off, so the bundle must carry the
+  chain up to the session where yz typed the prompt (top-level agent
+  f2ef770f-dfa2-4c76-9521-1c244845c4d1). That session file is 256,171,901 bytes:
+  --parent-session refuses it (over the 134,217,728-byte per-session cap) and
+  --session refuses the set (256,179,044 bytes over the 209,715,200-byte total
+  cap). The log must be uploaded unchanged — no trimming allowed.
+- BLOCKER 2 (usage): 0 usage rows attach while this run is live; a subagent's
+  usage row is written only once its run completes. Bundle's own instruction:
+  the top-level agent runs the SELECT with its own agent_id and each
+  subagent's, bundles, and submits — i.e. bundle must be re-run by the
+  top-level agent AFTER this session completes.
+- Prompt file used: ~/workspace/makefun/poster-place-isnt-there/prompt-yz-2026-11-21.txt
+  (yz's words verbatim, --prompt-origin handed-off, --prompt-via "coordinator
+  spawned this re-record session after the poster bounty opened").
+- Agent facts declared: --provider meta --model muse-spark-1.3 --effort default
+  --mcp none. Harness/harness-version/model were recorded by the sessions
+  (bundle only asked for provider + effort).
+- No bundle file was produced by this session. Path to the bundle when the
+  parent makes it: ~/workspace/makefun/poster-place-isnt-there/transcripts-v2.tar.gz
+
+## Exact commands still needed (parent / top-level agent, AFTER this session ends)
+1. Bundle (from inside the unpacked kit):
+   node cli/makefun.mjs bundle --repo ~/workspace/makefun/poster-place-isnt-there/build-v2 \
+     --mcp none --provider meta --model muse-spark-1.3 --effort default \
+     --prompt-file ~/workspace/makefun/poster-place-isnt-there/prompt-yz-2026-11-21.txt \
+     --prompt-origin handed-off \
+     --prompt-via "coordinator spawned this re-record session after the poster bounty opened" \
+     --out ~/workspace/makefun/poster-place-isnt-there/transcripts-v2.tar.gz
+   (run from the top-level agent so usage rows attach and the parent chain resolves;
+   if the 256 MB top-level session still blocks the chain, that is a kit limit to
+   raise with make.fun — do NOT trim the log and do NOT hand over a rebuilt session,
+   which would forfeit paid places.)
+2. Re-check with the bundle:
+   node cli/makefun.mjs check --kit <kit> --repo ~/workspace/makefun/poster-place-isnt-there/build-v2 \
+     --commit <new head sha> --transcripts ~/workspace/makefun/poster-place-isnt-there/transcripts-v2.tar.gz
+   Expect: transcripts_present + thinking_in_window + thinking_reproduces to be
+   decided here (reproduces needs >=30% authored lines incl. >=1 entrypoint line —
+   main.ts + README.md were authored whole in this session).
+3. Submit (needs the make.fun API key + yz's Solana keypair — NOT available to this session):
+   node cli/makefun.mjs submit --competition the-poster-for-a-place-that-i-2-20261121-0539 \
+     --repo-url https://github.com/endg9/kaldris-poster-place-isnt-there \
+     --commit <head sha> --bundle ~/workspace/makefun/poster-place-isnt-there/transcripts-v2.tar.gz \
+     --keypair <yz solana keypair> --title "KALDRIS"
+   Deadline: 2026-11-21T08:39:00Z (15:39 WIB). Repo is public, created 05:50:16Z
+   (after opening), owner endg9 = the account's GitHub login.
+
 ## Kit check — worktree, no transcripts (run 13:04 WIB / 06:04Z, in-session)
 kit the-poster-for-a-place-that-i-2-20261121-0539 dev: verified 8 files
 repository /home/hatch/workspace/makefun/poster-place-isnt-there/build-v2 @ worktree@24e5277a1be9: 5 entries
